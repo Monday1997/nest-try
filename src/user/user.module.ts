@@ -8,7 +8,8 @@ import {
 } from 'nest-winston';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
-
+const isDebug = process.env.NODE_ENV === 'development';
+console.log('🚀 ~ isDebug:', isDebug);
 function createDailyRotateTransport(level: string, filename: string) {
   return new winston.transports.DailyRotateFile({
     level,
@@ -42,9 +43,14 @@ function createDailyRotateTransport(level: string, filename: string) {
             }),
           ),
         }),
-        // warn级别以上的都在error**.log中
-        createDailyRotateTransport('warn', 'error'),
-        createDailyRotateTransport('info', 'app'),
+        ...(isDebug
+          ? []
+          : [
+              // warn级别以上的都在error**.log中
+              createDailyRotateTransport('warn', 'error'),
+              createDailyRotateTransport('info', 'app'),
+            ]),
+
         // 使用daily之后就不用winston原生的了
         // other transports...
         // new winston.transports.File({
