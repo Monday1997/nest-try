@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-
+import { HomeResources } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UserService {
   getUser() {
@@ -13,11 +14,15 @@ export class UserService {
 
 @Injectable()
 export class UserService2 {
+  constructor(private prisma: PrismaService) {}
   getUser() {
     return {
       code: 0,
       list: [{ name: '名字22', id: 2 }],
       msg: '获取成功22',
     };
+  }
+  getHomeData(): Promise<HomeResources[]> {
+    return this.prisma.homeResources.findMany({});
   }
 }
