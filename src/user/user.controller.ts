@@ -1,26 +1,22 @@
-import { Controller, Get, Inject, LoggerService } from '@nestjs/common';
-import { UserService2 } from './user.service';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-
-@Controller()
+import { Controller, Get, Version } from '@nestjs/common';
+import { UserService } from './user.service';
+import { Query, ParseIntPipe } from '@nestjs/common';
+@Controller('user')
 export class UserController {
-  constructor(
-    private UserService2: UserService2,
-    @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: LoggerService,
-  ) {
-    this.logger.log('this is log');
-    this.logger.warn('this is warn');
-    this.logger.error('this is error');
-    this.logger.verbose('this is verbose');
-  }
+  constructor(private UserService: UserService) {}
   @Get()
-  getUser(): any {
-    console.log('okook');
-    return this.UserService2.getUser();
+  async getUser(
+    @Query('pageSize', ParseIntPipe) pageSize = 10,
+    @Query('page', ParseIntPipe) page = 1,
+  ) {
+    const [data, total] = await this.UserService.getUser(page, pageSize);
+    return {
+      data,
+      total,
+    };
   }
-  @Get('home')
-  getHome() {
-    return this.UserService2.getHomeData();
+  @Get('find')
+  find() {
+    return 'version1';
   }
 }

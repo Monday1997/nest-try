@@ -1,28 +1,21 @@
+import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { HomeResources } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Users } from '@prisma/client';
 @Injectable()
 export class UserService {
-  getUser() {
-    return {
-      code: 0,
-      list: [{ name: '名字', id: 1 }],
-      msg: '获取成功',
-    };
-  }
-}
-
-@Injectable()
-export class UserService2 {
   constructor(private prisma: PrismaService) {}
-  getUser() {
-    return {
-      code: 0,
-      list: [{ name: '名字22', id: 2 }],
-      msg: '获取成功22',
-    };
-  }
-  getHomeData(): Promise<HomeResources[]> {
-    return this.prisma.homeResources.findMany({});
+  async getUser(
+    page: number = 1,
+    pageSize: number = 10,
+  ): Promise<[Users[], number]> {
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+    return await this.prisma.$transaction([
+      this.prisma.users.findMany({
+        skip,
+        take,
+      }),
+      this.prisma.users.count(),
+    ]);
   }
 }
