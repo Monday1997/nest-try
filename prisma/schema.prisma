@@ -29,6 +29,7 @@ model Users {
   password  String
   name      String
   phone     String?
+  status    String?  @default("actived")
   // status phome email ....
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
