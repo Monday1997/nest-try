@@ -24,15 +24,53 @@ model HomeResources {
 }
 
 model Users {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String
-  name      String
-  phone     String?
-  status    String?  @default("actived")
+  id           Int          @id @default(autoincrement())
+  username     String       @unique
+  password     String
+  name         String
+  phone        String?
+  status       String?      @default("actived")
   // status phome email ....
-  createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  createdAt    DateTime     @default(now())
+  updateAt     DateTime     @updatedAt
+  movie_users  MovieUsers[]
+  Role         Role[]
+  substituteId Int?         @unique
+  substitute   Users?       @relation("userSubstitute", fields: [substituteId], references: [id])
+  master       Users?       @relation("userSubstitute")
 
   @@map("users")
+}
+
+model Movie {
+  id          Int          @id @default(autoincrement())
+  movieName   String
+  movie_users MovieUsers[]
+  awards      awards?
+
+  @@map("movies")
+}
+
+model MovieUsers {
+  id      Int   @id @default(autoincrement())
+  moves   Movie @relation(fields: [movieId], references: [id])
+  movieId Int
+  users   Users @relation(fields: [userId], references: [id])
+  userId  Int
+
+  @@map("movie_users")
+}
+
+model Role {
+  id     Int    @id @default(autoincrement())
+  name   String
+  users  Users  @relation(fields: [id], references: [id])
+  userId Int
+}
+
+// 让奖项和电影一对一
+model awards {
+  id      Int   @id @default(autoincrement())
+  movie   Movie @relation(fields: [movieId], references: [id])
+  movieId Int   @unique
 }
