@@ -7,6 +7,8 @@ import {
   WinstonModule,
 } from 'nest-winston';
 import { AppController } from './app.controller';
+import { MovieModule } from './modules/movie/movie.module';
+import { AwardsModule } from './modules/awards/awards.module';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 
@@ -67,6 +69,8 @@ function createDailyRotateTransport(level: string, filename: string) {
       ],
     }),
     PrismaModule,
+    MovieModule,
+    AwardsModule,
   ],
   controllers: [AppController],
   providers: [],

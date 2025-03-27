@@ -28,7 +28,8 @@ export class UserController {
   }
   @Post()
   create(@Body() dto: CreateUserDto) {
-    return this.UserService.create(dto);
+    // return this.UserService.create(dto);
+    return dto;
   }
   @Put()
   update(@Body() data: UpdateUserDto) {
