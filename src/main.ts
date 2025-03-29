@@ -11,7 +11,7 @@ async function bootstrap() {
     defaultVersion: '1',
   });
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

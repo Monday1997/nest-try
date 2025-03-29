@@ -6,14 +6,12 @@ import {
   CreateUserWtihRoleInterface,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { GetUserDto } from './dto/get-user.dto';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
-  async getUser(
-    page: number = 1,
-    pageSize: number = 10,
-    id?: number,
-  ): Promise<[Users[], number]> {
+  async getUser(data: GetUserDto): Promise<[Users[], number]> {
+    const { page, pageSize, id } = data;
     const skip = (page - 1) * pageSize;
     const take = pageSize;
     const whereCondition = id ? { id } : {};
