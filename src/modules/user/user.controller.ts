@@ -7,9 +7,10 @@ import {
   Put,
   Delete,
   DefaultValuePipe,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Query, ParseIntPipe } from '@nestjs/common';
 import { CreateUserDto, CreateUserWtihRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('user')
@@ -19,8 +20,9 @@ export class UserController {
   async getUser(
     @Query('pageSize', new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('id', new ParseIntPipe({ optional: true })) id?: number,
   ) {
-    const [data, total] = await this.UserService.getUser(page, pageSize);
+    const [data, total] = await this.UserService.getUser(page, pageSize, id);
     return {
       data,
       total,
@@ -33,7 +35,11 @@ export class UserController {
   }
   @Post('createWithRole')
   createWithRole(@Body() dto: CreateUserWtihRoleDto) {
-    return this.UserService.createWithRole(dto);
+    console.log('🚀 ~ UserController ~ createWithRole ~ dto:', dto);
+    const role = {
+      create: dto.role,
+    };
+    return this.UserService.createWithRole({ ...dto, role });
   }
   @Put()
   update(@Body() data: UpdateUserDto) {

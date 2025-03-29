@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsOptional, IsIn, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 export class CreateUserDto {
   @IsString()
   username: string;
@@ -18,8 +19,21 @@ export class CreateUserDto {
   @IsIn(['actived', 'dead']) //规定值的范围
   status: string;
 }
+
+type TRolesList = { name: string; movieId: number }[];
+class RoleCraete {
+  name: string;
+  movieId: number;
+}
+
 export class CreateUserWtihRoleDto extends CreateUserDto {
+  @ValidateNested()
+  @Type(() => RoleCraete)
+  role: TRolesList;
+}
+export class CreateUserWtihRoleInterface extends CreateUserDto {
   role: {
     create: { name: string; movieId: number }[];
+    // connect: { id: number }[];
   };
 }

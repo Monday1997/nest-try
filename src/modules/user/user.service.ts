@@ -1,7 +1,10 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
-import { CreateUserDto, CreateUserWtihRoleDto } from './dto/create-user.dto';
+import {
+  CreateUserDto,
+  CreateUserWtihRoleInterface,
+} from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserService {
@@ -9,13 +12,22 @@ export class UserService {
   async getUser(
     page: number = 1,
     pageSize: number = 10,
+    id?: number,
   ): Promise<[Users[], number]> {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
+    const whereCondition = id ? { id } : {};
     return await this.prisma.$transaction([
       this.prisma.users.findMany({
         skip,
         take,
+        where: whereCondition,
+        include: {
+          role: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
       }),
       this.prisma.users.count(),
     ]);
@@ -23,7 +35,7 @@ export class UserService {
   create(data: CreateUserDto) {
     return this.prisma.users.create({ data });
   }
-  createWithRole(data: CreateUserWtihRoleDto) {
+  createWithRole(data: CreateUserWtihRoleInterface) {
     return this.prisma.users.create({ data });
   }
   update(data: UpdateUserDto) {
