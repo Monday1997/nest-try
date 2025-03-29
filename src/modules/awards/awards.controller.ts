@@ -17,8 +17,14 @@ import { UpdateAwardDto } from './dto/update_award.dto';
 export class AwardsController {
   constructor(private awardsService: AwardsService) {}
   @Get()
-  findAwards(@Query() name: string) {
-    return this.awardsService.findAward(name);
+  async findAwards(@Query() name: string) {
+    const result = await this.awardsService.findAward(name);
+    return result.map((item) => {
+      return {
+        ...item,
+        movie: item.movie.movieName,
+      };
+    });
   }
   @Post()
   createAwards(@Body() dto: CreateAwardDto) {

@@ -7,7 +7,6 @@ import { UpdateAwardDto } from './dto/update_award.dto';
 export class AwardsService {
   constructor(private prisma: PrismaService) {}
   createAward(dto: CreateAwardDto) {
-    console.log('🚀 ~ AwardsService ~ createAward ~ dto:', dto);
     return this.prisma.awards.create({ data: dto });
   }
   delAward(id: number) {
@@ -22,6 +21,9 @@ export class AwardsService {
   }
   findAward(name: string) {
     return this.prisma.awards.findMany({
+      include: {
+        movie: true,
+      },
       where: {
         name,
       },
