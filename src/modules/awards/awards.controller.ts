@@ -1,4 +1,14 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { AwardsService } from './awards.service';
 import { CreateAwardDto } from './dto/create_award.dto';
 import { UpdateAwardDto } from './dto/update_award.dto';
@@ -7,19 +17,19 @@ import { UpdateAwardDto } from './dto/update_award.dto';
 export class AwardsController {
   constructor(private awardsService: AwardsService) {}
   @Get()
-  findAwards(name: string) {
-    this.awardsService.findAward(name);
+  findAwards(@Query() name: string) {
+    return this.awardsService.findAward(name);
   }
   @Post()
-  createAwards(dto: CreateAwardDto) {
-    this.awardsService.createAward(dto);
+  createAwards(@Body() dto: CreateAwardDto) {
+    return this.awardsService.createAward(dto);
   }
   @Put()
-  updateAwards(dto: UpdateAwardDto) {
-    this.awardsService.updateAward(dto);
+  updateAwards(@Body() dto: UpdateAwardDto) {
+    return this.awardsService.updateAward(dto);
   }
-  @Delete()
-  delAwards(id: number) {
-    this.awardsService.delAward(id);
+  @Delete(':id')
+  delAwards(@Param('id', ParseIntPipe) id: number) {
+    return this.awardsService.delAward(id);
   }
 }

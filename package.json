@@ -22,10 +22,7 @@
     "migrate:create": "prisma generate",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "generate:module": "nest g mo modules/$1 --no-spec",
-    "generate:service": "nest g s modules/$1 --no-spec",
-    "generate:controller": "nest g co modules/$1 --no-spec",
-    "nest:generate": "npm run generate:module -- $1 && npm run generate:service -- $1 && npm run generate:controller -- $1"
+    "generate": "cross-env MODULE_NAME=$1 sh -c 'nest g mo modules/$MODULE_NAME --no-spec && nest g s modules/$MODULE_NAME --no-spec && nest g co modules/$MODULE_NAME --no-spec'"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

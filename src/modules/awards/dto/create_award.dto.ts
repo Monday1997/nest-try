@@ -1,8 +1,7 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 export class CreateAwardDto {
   @IsString()
   name: string;
-  @IsOptional()
   @IsNumber()
   movieId: number;
 }
