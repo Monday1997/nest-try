@@ -1,7 +1,7 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, CreateUserWtihRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserService {
@@ -21,6 +21,9 @@ export class UserService {
     ]);
   }
   create(data: CreateUserDto) {
+    return this.prisma.users.create({ data });
+  }
+  createWithRole(data: CreateUserWtihRoleDto) {
     return this.prisma.users.create({ data });
   }
   update(data: UpdateUserDto) {

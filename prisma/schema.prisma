@@ -24,30 +24,41 @@ model HomeResources {
 }
 
 model Users {
-  id           Int      @id @default(autoincrement())
-  username     String   @unique
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
   password     String
   name         String
   phone        String?
-  status       String?  @default("actived")
+  status       String?        @default("actived")
   // status phome email ....
-  createdAt    DateTime @default(now())
-  updateAt     DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updateAt     DateTime       @updatedAt
   role         Role[]
-  substituteId Int?     @unique
-  substitute   Users?   @relation("userSubstitute", fields: [substituteId], references: [id])
-  master       Users?   @relation("userSubstitute")
+  substituteId Int?           @unique
+  substitute   Users?         @relation("userSubstitute", fields: [substituteId], references: [id])
+  master       Users?         @relation("userSubstitute")
+  moive        UserOnOmovie[]
 
   @@map("users")
 }
 
 model Movie {
-  id        Int     @id @default(autoincrement())
+  id        Int            @id @default(autoincrement())
   movieName String
   awards    awards?
   role      Role[]
+  user      UserOnOmovie[]
 
   @@map("movies")
+}
+
+// 演员电影联系表
+model UserOnOmovie {
+  id      Int    @id @default(autoincrement())
+  Users   Users? @relation(fields: [usersId], references: [id])
+  usersId Int?
+  Movie   Movie? @relation(fields: [movieId], references: [id])
+  movieId Int?
 }
 
 // 演员角色此处一对多 

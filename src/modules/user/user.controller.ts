@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Query, ParseIntPipe } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto, CreateUserWtihRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('user')
 export class UserController {
@@ -30,6 +30,10 @@ export class UserController {
   create(@Body() dto: CreateUserDto) {
     // return this.UserService.create(dto);
     return dto;
+  }
+  @Post('createWithRole')
+  createWithRole(@Body() dto: CreateUserWtihRoleDto) {
+    return this.UserService.createWithRole(dto);
   }
   @Put()
   update(@Body() data: UpdateUserDto) {

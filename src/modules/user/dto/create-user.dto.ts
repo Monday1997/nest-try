@@ -18,3 +18,8 @@ export class CreateUserDto {
   @IsIn(['actived', 'dead']) //规定值的范围
   status: string;
 }
+export class CreateUserWtihRoleDto extends CreateUserDto {
+  role: {
+    create: { name: string; movieId: number }[];
+  };
+}

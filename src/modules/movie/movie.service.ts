@@ -1,17 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateMovieDto } from './dto/create-movie.dto';
+import {
+  CreateMovieDtoWithUserDto,
+  CreateMovieDto,
+} from './dto/create-movie.dto';
 import { UPdateMovie } from './dto/update-moive.dto';
 @Injectable()
 export class MovieService {
   constructor(private prisma: PrismaService) {}
-  addMovies(dto: CreateMovieDto | CreateMovieDto[]) {
+  addMovies(
+    dto: CreateMovieDtoWithUserDto | CreateMovieDto | CreateMovieDto[],
+  ) {
     if (dto instanceof Array) {
       return this.prisma.movie.createMany({
         data: dto,
       });
     }
-    return this.prisma.movie.create({ data: dto });
+    return this.prisma.movie.create({
+      data: dto,
+    });
   }
   updateMovie(dto: UPdateMovie) {
     return this.prisma.movie.update({
