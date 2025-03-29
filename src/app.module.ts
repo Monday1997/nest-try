@@ -9,6 +9,7 @@ import {
 import { AppController } from './app.controller';
 import { MovieModule } from './modules/movie/movie.module';
 import { AwardsModule } from './modules/awards/awards.module';
+import { RoleModule } from './modules/role/role.module';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 
@@ -71,6 +72,7 @@ function createDailyRotateTransport(level: string, filename: string) {
     PrismaModule,
     MovieModule,
     AwardsModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [],
