@@ -8,23 +8,26 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, CreateUserWtihRoleDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserDto } from './dto/get-user.dto';
+import { BigIntTransformIterceptor } from '@/common/interceptor/bigint-interceptor';
+
 @Controller('user')
 export class UserController {
   constructor(private UserService: UserService) {}
   @Get()
+  @UseInterceptors(BigIntTransformIterceptor)
   async getUser(@Query() data: GetUserDto) {
-    console.log('🚀 ~ UserController ~ getUser ~ data:', data);
     const [list, total] = await this.UserService.getUser(data);
     return {
       list: list.map((item) => {
         return {
           ...item,
-          role: item.role.map((roleItem) => {
+          role: item.role?.map((roleItem) => {
             return {
               ...roleItem,
               movieName: roleItem.Movie?.movieName,

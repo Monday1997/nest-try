@@ -7,6 +7,7 @@ import {
 import { UpdateUserDto } from './dto/update-user.dto';
 import { GetUserDto } from './dto/get-user.dto';
 import { transformObjToArr } from '@/utils/pagenations';
+
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}

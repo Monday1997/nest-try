@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,11 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 写完会格式化 没有格式化说明安装prisma插件
 model HomeResources {
   id     Int     @id @default(autoincrement())
   title  String
-  url    String? //问号即可选
+  url    String?
   module String  @default("home")
 
   @@map("home_resources")
@@ -29,15 +22,15 @@ model Users {
   password     String
   name         String
   phone        String?
-  status       String?        @default("actived")
-  // status phome email ....
   createdAt    DateTime       @default(now())
   updateAt     DateTime       @updatedAt
-  role         Role[]
+  status       String?        @default("actived")
   substituteId Int?           @unique
+  phones       BigInt?
+  role         Role[]
+  moive        UserOnOmovie[]
   substitute   Users?         @relation("userSubstitute", fields: [substituteId], references: [id])
   master       Users?         @relation("userSubstitute")
-  moive        UserOnOmovie[]
 
   @@map("users")
 }
@@ -45,36 +38,33 @@ model Users {
 model Movie {
   id        Int            @id @default(autoincrement())
   movieName String
-  awards    awards?
   role      Role[]
   user      UserOnOmovie[]
+  awards    awards?
 
   @@map("movies")
 }
 
-// 演员电影联系表
 model UserOnOmovie {
   id      Int    @id @default(autoincrement())
-  Users   Users? @relation(fields: [usersId], references: [id])
   usersId Int?
-  Movie   Movie? @relation(fields: [movieId], references: [id])
   movieId Int?
+  Movie   Movie? @relation(fields: [movieId], references: [id])
+  Users   Users? @relation(fields: [usersId], references: [id])
 }
 
-// 演员角色此处一对多 
 model Role {
   id      Int    @id @default(autoincrement())
   name    String
-  users   Users? @relation(fields: [userId], references: [id])
   userId  Int?
-  Movie   Movie  @relation(fields: [movieId], references: [id])
   movieId Int
+  Movie   Movie  @relation(fields: [movieId], references: [id])
+  users   Users? @relation(fields: [userId], references: [id])
 }
 
-// 让奖项和电影一对一
 model awards {
   id      Int    @id @default(autoincrement())
-  movie   Movie? @relation(fields: [movieId], references: [id])
   movieId Int    @unique
   name    String
+  movie   Movie  @relation(fields: [movieId], references: [id])
 }
