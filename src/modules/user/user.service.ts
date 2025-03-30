@@ -15,12 +15,14 @@ export class UserService {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
     const whereCondition = {
-      ...(id && { id }),
-      role: {
-        some: {
-          OR: [{ id: 4 }, { id: 5 }],
-        },
+      id: {
+        in: id,
       },
+      // role: {
+      //   some: {
+      //     OR: [{ id: 4 }, { id: 5 }],
+      //   },
+      // },
     };
     Object.entries(whereCondition).map(([key, value]) => {
       if (value === undefined) {

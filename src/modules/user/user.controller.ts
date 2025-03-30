@@ -18,6 +18,7 @@ export class UserController {
   constructor(private UserService: UserService) {}
   @Get()
   async getUser(@Query() data: GetUserDto) {
+    console.log('🚀 ~ UserController ~ getUser ~ data:', data);
     const [list, total] = await this.UserService.getUser(data);
     return {
       list: list.map((item) => {
