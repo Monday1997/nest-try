@@ -20,7 +20,18 @@ export class UserController {
   async getUser(@Query() data: GetUserDto) {
     const [list, total] = await this.UserService.getUser(data);
     return {
-      list,
+      list: list.map((item) => {
+        return {
+          ...item,
+          role: item.role.map((roleItem) => {
+            return {
+              ...roleItem,
+              movieName: roleItem.Movie?.movieName,
+              Movie: undefined,
+            };
+          }),
+        };
+      }),
       total,
     };
   }
